@@ -1,4 +1,4 @@
-# peladeiros_ufcg
+# Peladeiros UFCG
 Projeto em Alloy para a disciplina Lógica Matemática
 
 ## Especificação do Projeto
