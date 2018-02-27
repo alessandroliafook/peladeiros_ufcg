@@ -26,12 +26,14 @@ one sig Clube {
 	sub20 : one Sub20,
 	principal : one TimePrincipal
 	
-} 
+}
+ 
 {
 sub18.treinador != sub20.treinador 
 and sub20.treinador != principal.treinador 
 and sub18.treinador != principal.treinador
 }
+
 -------------------------------------------------------------------------------------------------------------------------------
 abstract sig Time {
 	treinador : one Treinador,
@@ -68,20 +70,18 @@ sig GerenteDeFutebol extends Membro {}
 
 -- FATOS
 
-fact ClubeFatos {
-}
-
 fact TimeFatos {
-	all sub20 : Sub20, sub18 : Sub18, j1:Jogador, j2: Jogador | (verificaJogador[j1, sub18] and verificaJogador[j2, sub20]) => j1 != j2
+	all sub20 : Sub20, sub18 : Sub18, j1, j2: Jogador | (verificaJogador[j1, sub18] and verificaJogador[j2, sub20]) => j1 != j2
 	all t:Time, j1:Jogador, j2: Jogador | (verificaTitular[j1, t] and verificaReserva[j2, t]) => j1 != j2
-	all t:Time | #getTitulares[t] = 11 and #getReservas[t] >= 7 and #getReservas[t] <= 14
-	all t: Time | verificaCapitao[t] 
-}
-
-fact JogadorFatos{
+	all t:Time | validaElenco[t]
+	all t: Time | verificaCapitao[t]
 }
 
 -- PREDICADOS
+
+pred validaElenco[t:Time] {
+	#getTitulares[t] = 11 and #getReservas[t] >= 7 and #getReservas[t] <= 14
+}
 
 pred verificaJogador[j:Jogador, t:Time] {
 	j in getJogadores[t]
