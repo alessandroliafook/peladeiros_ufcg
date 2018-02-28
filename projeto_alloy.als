@@ -27,13 +27,6 @@ one sig Clube {
 	principal : one TimePrincipal
 	
 }
- 
-{
-sub18.treinador != sub20.treinador 
-and sub20.treinador != principal.treinador 
-and sub18.treinador != principal.treinador
-}
-
 -------------------------------------------------------------------------------------------------------------------------------
 abstract sig Time {
 	treinador : one Treinador,
@@ -71,16 +64,25 @@ sig GerenteDeFutebol extends Membro {}
 -- FATOS
 
 fact TimeFatos {
-	all sub20 : Sub20, sub18 : Sub18, j1, j2: Jogador | (verificaJogador[j1, sub18] and verificaJogador[j2, sub20]) => j1 != j2
-	all t:Time, j1:Jogador, j2: Jogador | (verificaTitular[j1, t] and verificaReserva[j2, t]) => j1 != j2
-	all t:Time | validaElenco[t]
+	all sub20:Sub20, sub18:Sub18, j1, j2:Jogador | verificaElencosDiferentes[sub20, sub18, j1, j2]
+	all t:Time, j1, j2:Jogador | verificaElenco[t,j1,j2]
+	all t:Time | verificaTamanhoElenco[t]
 	all t: Time | verificaCapitao[t]
+	all tr1:Treinador | one tr1.~treinador
 }
 
 -- PREDICADOS
 
-pred validaElenco[t:Time] {
+pred verificaTamanhoElenco[t:Time] {
 	#getTitulares[t] = 11 and #getReservas[t] >= 7 and #getReservas[t] <= 14
+}
+
+pred verificaElencosDiferentes[t1, t2:Time, j1, j2:Jogador]{
+	(verificaJogador[j1, t1] and verificaJogador[j2, t2]) => j1 != j2
+}
+
+pred verificaElenco[t:Time, j1, j2:Jogador] {
+	(verificaTitular[j1, t] and verificaReserva[j2, t]) => j1 != j2
 }
 
 pred verificaJogador[j:Jogador, t:Time] {
