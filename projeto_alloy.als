@@ -27,7 +27,7 @@ one sig Clube {
 	principal : one TimePrincipal
 	
 }
--------------------------------------------------------------------------------------------------------------------------------
+
 abstract sig Time {
 	treinador : one Treinador,
 	esquema : one Esquema,
@@ -49,7 +49,6 @@ one sig Esquema433 extends Esquema {}
 one sig Esquema352 extends Esquema {}
 one sig Esquema442 extends Esquema {}
 
--------------------------------------------------------------------------------------------------------------------------------
 one sig Diretoria {
 	presidente : one Presidente,
 	membro : one Membro
@@ -73,30 +72,37 @@ fact TimeFatos {
 
 -- PREDICADOS
 
+-- Verifica a quantidade de jogadores reservas que compõe o time, respeitando o mínimo de 7 a 14 jogadores.
 pred verificaTamanhoElenco[t:Time] {
 	#getTitulares[t] = 11 and #getReservas[t] >= 7 and #getReservas[t] <= 14
 }
 
+-- Verifica se o mesmo jogador não está em dois times.
 pred verificaElencosDiferentes[t1, t2:Time, j1, j2:Jogador]{
 	(verificaJogador[j1, t1] and verificaJogador[j2, t2]) => j1 != j2
 }
 
+-- Verifica se o mesmo jogador não está no elenco titular e no reserva.
 pred verificaElenco[t:Time, j1, j2:Jogador] {
 	(verificaTitular[j1, t] and verificaReserva[j2, t]) => j1 != j2
 }
 
+-- Verifica se jogador está no time.
 pred verificaJogador[j:Jogador, t:Time] {
 	j in getJogadores[t]
 }
 
+-- Verificar se jogador está no elenco dos títulares.
 pred verificaTitular[j:Jogador, t:Time] {
 	j in t.titulares
 }
 
+-- Verifica se jogador está no elenco dos reservas.
 pred verificaReserva[j:Jogador, t:Time] {
 	j in t.reservas
 }
 
+-- Verifica se o time tem capitão
 pred verificaCapitao[t:Time] {
 	t.capitao in getTitulares[t]
 }
