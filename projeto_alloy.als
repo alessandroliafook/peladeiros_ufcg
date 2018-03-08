@@ -68,6 +68,7 @@ fact TimeFatos {
 	all t:Time | verificaTamanhoElenco[t]
 	all t: Time | verificaCapitao[t]
 	all tr1:Treinador | one tr1.~treinador
+	all m:Membro | one m.~membro
 }
 
 -- PREDICADOS
